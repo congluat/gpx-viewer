@@ -49,9 +49,9 @@ function App() {
       </div>
 
       {/* Mobile Layout */}
-      <div className="lg:hidden h-screen flex flex-col bg-gray-100">
+      <div className="lg:hidden flex flex-col bg-gray-100" style={{ height: '100dvh' }}>
         {/* Mobile Header */}
-        <header className="bg-white shadow-sm px-4 py-3 flex items-center justify-between flex-shrink-0 z-20">
+        <header className="bg-white shadow-sm px-4 py-2 flex items-center justify-between flex-shrink-0 z-20">
           <button
             onClick={() => setSidebarOpen(true)}
             className="p-2 -ml-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg"
@@ -63,6 +63,9 @@ function App() {
           <h1 className="text-lg font-bold text-gray-800">GPX Viewer</h1>
           <div className="w-10" />
         </header>
+
+        {/* Mobile Top Navigation */}
+        <MobileNav activeTab={mobileTab} onTabChange={setMobileTab} />
 
         {/* Mobile Content */}
         <main className="flex-1 overflow-hidden relative">
@@ -94,9 +97,6 @@ function App() {
             </div>
           )}
         </main>
-
-        {/* Mobile Bottom Navigation */}
-        <MobileNav activeTab={mobileTab} onTabChange={setMobileTab} />
 
         {/* Mobile Sidebar Overlay */}
         {sidebarOpen && (

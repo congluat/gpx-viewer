@@ -40,20 +40,20 @@ export default function MobileNav({ activeTab, onTabChange }: MobileNavProps) {
   ];
 
   return (
-    <nav className="bg-white border-t border-gray-200 flex-shrink-0 safe-area-bottom">
+    <nav className="bg-white border-b border-gray-200 flex-shrink-0">
       <div className="flex">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
-            className={`flex-1 flex flex-col items-center py-2 px-1 transition-colors
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-1 transition-colors
               ${activeTab === tab.id
-                ? 'text-blue-600'
+                ? 'text-blue-600 border-b-2 border-blue-600'
                 : 'text-gray-500 hover:text-gray-700'
               }`}
           >
             {tab.icon}
-            <span className="text-xs mt-1 font-medium">{tab.label}</span>
+            <span className="text-sm font-medium">{tab.label}</span>
           </button>
         ))}
       </div>

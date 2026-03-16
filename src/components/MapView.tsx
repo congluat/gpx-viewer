@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { MapContainer, TileLayer, Polyline, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Polyline, Marker, Popup, useMap, ScaleControl } from 'react-leaflet';
 import L from 'leaflet';
 import { useGPX } from '../context/GPXContext';
 import { getSlopeColor } from '../utils/slopeDetector';
@@ -39,6 +39,45 @@ const waypointIcon = new L.Icon({
   iconAnchor: [12, 36],
   popupAnchor: [0, -36],
 });
+
+const startIcon = new L.Icon({
+  iconUrl: 'data:image/svg+xml;base64,' + btoa(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+      <circle cx="16" cy="16" r="14" fill="#22c55e" stroke="white" stroke-width="3"/>
+      <polygon points="12,9 12,23 24,16" fill="white"/>
+    </svg>
+  `),
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
+  popupAnchor: [0, -16],
+});
+
+const finishIcon = new L.Icon({
+  iconUrl: 'data:image/svg+xml;base64,' + btoa(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+      <circle cx="16" cy="16" r="14" fill="#ef4444" stroke="white" stroke-width="3"/>
+      <rect x="10" y="8" width="12" height="16" fill="white" rx="1"/>
+      <rect x="12" y="10" width="3" height="3" fill="#ef4444"/>
+      <rect x="17" y="10" width="3" height="3" fill="#ef4444"/>
+      <rect x="12" y="14.5" width="3" height="3" fill="#ef4444"/>
+      <rect x="17" y="14.5" width="3" height="3" fill="#ef4444"/>
+      <rect x="12" y="19" width="3" height="3" fill="#ef4444"/>
+      <rect x="17" y="19" width="3" height="3" fill="#ef4444"/>
+    </svg>
+  `),
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
+  popupAnchor: [0, -16],
+});
+
+function createKmIcon(km: number) {
+  return new L.DivIcon({
+    className: 'km-marker',
+    html: `<div class="km-label">${km}</div>`,
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+  });
+}
 
 function MapController() {
   const map = useMap();
@@ -142,6 +181,84 @@ function Waypoints() {
   );
 }
 
+function StartFinishMarkers() {
+  const { gpxData } = useGPX();
+
+  if (!gpxData || gpxData.trackPoints.length < 2) return null;
+
+  const startPoint = gpxData.trackPoints[0];
+  const finishPoint = gpxData.trackPoints[gpxData.trackPoints.length - 1];
+
+  return (
+    <>
+      <Marker position={[startPoint.lat, startPoint.lon]} icon={startIcon}>
+        <Popup>
+          <div className="text-sm">
+            <p className="font-bold text-green-600">Điểm xuất phát</p>
+            <p><strong>Độ cao:</strong> {startPoint.elevation.toFixed(0)}m</p>
+          </div>
+        </Popup>
+      </Marker>
+      <Marker position={[finishPoint.lat, finishPoint.lon]} icon={finishIcon}>
+        <Popup>
+          <div className="text-sm">
+            <p className="font-bold text-red-600">Điểm kết thúc</p>
+            <p><strong>Độ cao:</strong> {finishPoint.elevation.toFixed(0)}m</p>
+            <p><strong>Tổng quãng đường:</strong> {finishPoint.distance.toFixed(2)}km</p>
+          </div>
+        </Popup>
+      </Marker>
+    </>
+  );
+}
+
+function KilometerMarkers() {
+  const { gpxData } = useGPX();
+
+  const kmPoints = useMemo(() => {
+    if (!gpxData || gpxData.trackPoints.length < 2) return [];
+
+    const points: Array<{ km: number; lat: number; lon: number; elevation: number }> = [];
+    let nextKm = 1;
+
+    for (let i = 1; i < gpxData.trackPoints.length; i++) {
+      const point = gpxData.trackPoints[i];
+      const prevPoint = gpxData.trackPoints[i - 1];
+
+      if (point.distance >= nextKm && prevPoint.distance < nextKm) {
+        const ratio = (nextKm - prevPoint.distance) / (point.distance - prevPoint.distance);
+        const lat = prevPoint.lat + ratio * (point.lat - prevPoint.lat);
+        const lon = prevPoint.lon + ratio * (point.lon - prevPoint.lon);
+        const elevation = prevPoint.elevation + ratio * (point.elevation - prevPoint.elevation);
+
+        points.push({ km: nextKm, lat, lon, elevation });
+        nextKm++;
+      }
+    }
+
+    return points;
+  }, [gpxData]);
+
+  return (
+    <>
+      {kmPoints.map((point) => (
+        <Marker
+          key={point.km}
+          position={[point.lat, point.lon]}
+          icon={createKmIcon(point.km)}
+        >
+          <Popup>
+            <div className="text-sm">
+              <p className="font-bold">Km {point.km}</p>
+              <p><strong>Độ cao:</strong> {point.elevation.toFixed(0)}m</p>
+            </div>
+          </Popup>
+        </Marker>
+      ))}
+    </>
+  );
+}
+
 export default function MapView() {
   const { gpxData, error } = useGPX();
 
@@ -182,8 +299,11 @@ export default function MapView() {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <ScaleControl position="bottomright" metric={true} imperial={false} />
       <MapController />
       <TrackLine />
+      <KilometerMarkers />
+      <StartFinishMarkers />
       <HoverMarker />
       <Waypoints />
     </MapContainer>
