@@ -28,5 +28,6 @@ export const races: Race[] = [
 ];
 
 export function getGpxPath(race: Race, distance: RaceDistance): string {
-  return `/gpx/${race.folder}/${distance.fileName}`;
+  const base = import.meta.env.BASE_URL || '/';
+  return `${base}gpx/${race.folder}/${distance.fileName}`;
 }
