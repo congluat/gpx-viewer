@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPX Viewer Sample"
+  xmlns="http://www.topografix.com/GPX/1/1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <metadata>
+    <name>Đường leo núi mẫu</name>
+    <desc>Một tuyến đường leo núi mẫu để test ứng dụng</desc>
+  </metadata>
+  <wpt lat="21.0285" lon="105.8542">
+    <ele>15</ele>
+    <name>Điểm xuất phát</name>
+    <desc>Bắt đầu hành trình</desc>
+  </wpt>
+  <wpt lat="21.0350" lon="105.8600">
+    <ele>150</ele>
+    <name>Trạm nghỉ 1</name>
+    <desc>Nghỉ chân đầu tiên</desc>
+  </wpt>
+  <wpt lat="21.0450" lon="105.8700">
+    <ele>450</ele>
+    <name>Đỉnh núi</name>
+    <desc>Điểm cao nhất</desc>
+  </wpt>
+  <wpt lat="21.0550" lon="105.8800">
+    <ele>100</ele>
+    <name>Điểm kết thúc</name>
+    <desc>Kết thúc hành trình</desc>
+  </wpt>
+  <trk>
+    <name>Đường leo núi mẫu</name>
+    <trkseg>
+      <trkpt lat="21.0285" lon="105.8542"><ele>15</ele></trkpt>
+      <trkpt lat="21.0290" lon="105.8550"><ele>25</ele></trkpt>
+      <trkpt lat="21.0295" lon="105.8555"><ele>35</ele></trkpt>
+      <trkpt lat="21.0300" lon="105.8560"><ele>50</ele></trkpt>
+      <trkpt lat="21.0310" lon="105.8565"><ele>70</ele></trkpt>
+      <trkpt lat="21.0320" lon="105.8575"><ele>95</ele></trkpt>
+      <trkpt lat="21.0330" lon="105.8580"><ele>120</ele></trkpt>
+      <trkpt lat="21.0340" lon="105.8590"><ele>140</ele></trkpt>
+      <trkpt lat="21.0350" lon="105.8600"><ele>150</ele></trkpt>
+      <trkpt lat="21.0360" lon="105.8610"><ele>165</ele></trkpt>
+      <trkpt lat="21.0370" lon="105.8620"><ele>190</ele></trkpt>
+      <trkpt lat="21.0380" lon="105.8630"><ele>220</ele></trkpt>
+      <trkpt lat="21.0390" lon="105.8640"><ele>260</ele></trkpt>
+      <trkpt lat="21.0400" lon="105.8650"><ele>300</ele></trkpt>
+      <trkpt lat="21.0410" lon="105.8660"><ele>350</ele></trkpt>
+      <trkpt lat="21.0420" lon="105.8670"><ele>390</ele></trkpt>
+      <trkpt lat="21.0430" lon="105.8680"><ele>420</ele></trkpt>
+      <trkpt lat="21.0440" lon="105.8690"><ele>440</ele></trkpt>
+      <trkpt lat="21.0450" lon="105.8700"><ele>450</ele></trkpt>
+      <trkpt lat="21.0460" lon="105.8710"><ele>445</ele></trkpt>
+      <trkpt lat="21.0470" lon="105.8720"><ele>430</ele></trkpt>
+      <trkpt lat="21.0480" lon="105.8730"><ele>400</ele></trkpt>
+      <trkpt lat="21.0490" lon="105.8740"><ele>350</ele></trkpt>
+      <trkpt lat="21.0500" lon="105.8750"><ele>290</ele></trkpt>
+      <trkpt lat="21.0510" lon="105.8760"><ele>230</ele></trkpt>
+      <trkpt lat="21.0520" lon="105.8770"><ele>180</ele></trkpt>
+      <trkpt lat="21.0530" lon="105.8780"><ele>140</ele></trkpt>
+      <trkpt lat="21.0540" lon="105.8790"><ele>115</ele></trkpt>
+      <trkpt lat="21.0550" lon="105.8800"><ele>100</ele></trkpt>
+    </trkseg>
+  </trk>
+</gpx>
