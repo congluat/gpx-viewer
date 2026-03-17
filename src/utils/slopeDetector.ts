@@ -85,19 +85,17 @@ export function detectSlopes(trackPoints: TrackPoint[]): SlopeSegment[] {
 export function getSlopeColor(grade: number): string {
   const absGrade = Math.abs(grade);
   
-  if (absGrade < 3) return '#22c55e'; // green - easy
-  if (absGrade < 6) return '#eab308'; // yellow - moderate
-  if (absGrade < 10) return '#f97316'; // orange - hard
-  if (absGrade < 15) return '#ef4444'; // red - very hard
-  return '#7c2d12'; // dark red - extreme
+  if (absGrade < 5) return '#22c55e'; // green - easy
+  if (absGrade < 10) return '#eab308'; // yellow - moderate
+  if (absGrade < 15) return '#f97316'; // orange - hard
+  return '#ef4444'; // red - very hard
 }
 
 export function getSlopeDifficulty(grade: number): string {
   const absGrade = Math.abs(grade);
   
-  if (absGrade < 3) return 'Dễ';
-  if (absGrade < 6) return 'Trung bình';
-  if (absGrade < 10) return 'Khó';
-  if (absGrade < 15) return 'Rất khó';
-  return 'Cực khó';
+  if (absGrade < 5) return 'Dễ';
+  if (absGrade < 10) return 'Trung bình';
+  if (absGrade < 15) return 'Khó';
+  return 'Rất khó';
 }

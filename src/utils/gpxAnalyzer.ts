@@ -88,6 +88,7 @@ function extractWaypointsWithIndex(parser: GPXParser, trackPoints: TrackPoint[])
     let minDistance = Infinity;
     let distanceFromStart = 0;
     let nearestIndex = 0;
+    let nearestElevation = 0;
     
     for (let i = 0; i < trackPoints.length; i++) {
       const tp = trackPoints[i];
@@ -96,6 +97,7 @@ function extractWaypointsWithIndex(parser: GPXParser, trackPoints: TrackPoint[])
         minDistance = dist;
         distanceFromStart = tp.distance;
         nearestIndex = i;
+        nearestElevation = tp.elevation;
       }
     }
     
@@ -104,7 +106,7 @@ function extractWaypointsWithIndex(parser: GPXParser, trackPoints: TrackPoint[])
         name: wp.name || 'Waypoint',
         lat: wp.lat,
         lon: wp.lon,
-        elevation: wp.ele || 0,
+        elevation: wp.ele || nearestElevation,
         description: wp.desc || '',
         distanceFromStart,
       },

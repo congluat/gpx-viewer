@@ -20,6 +20,27 @@ html, body, #root {
   width: 100%;
 }
 
+/* Slope legend on map */
+.slope-legend {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 8px 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e5e7eb;
+}
+
+@media (max-width: 1024px) {
+  .slope-legend {
+    top: 8px;
+    right: 8px;
+    padding: 6px 8px;
+  }
+}
+
 /* Kilometer markers on track */
 .km-marker {
   background: transparent !important;
@@ -39,6 +60,57 @@ html, body, #root {
   font-weight: 700;
   border: 1.5px solid white;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Waypoint/Checkpoint markers with labels */
+.waypoint-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.waypoint-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.waypoint-pin {
+  width: 24px;
+  height: 36px;
+  background: #3b82f6;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: 2px solid white;
+}
+
+.waypoint-pin::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+}
+
+.waypoint-label {
+  background: rgba(255, 255, 255, 0.95);
+  color: #1e40af;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  border: 1px solid #3b82f6;
+  margin-top: 2px;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Scale control styling */

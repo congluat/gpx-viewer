@@ -22,6 +22,11 @@ interface ElevationChartProps {
   compact?: boolean;
 }
 
+interface GradientStop {
+  offset: string;
+  color: string;
+}
+
 export default function ElevationChart({ compact = false }: ElevationChartProps) {
   const { gpxData, hoverPoint, setHoverDistance } = useGPX();
 
@@ -40,6 +45,18 @@ export default function ElevationChart({ compact = false }: ElevationChartProps)
         grade: point.grade,
       }));
   }, [gpxData]);
+
+  const gradientStops = useMemo((): GradientStop[] => {
+    if (chartData.length === 0) return [];
+
+    const totalDistance = chartData[chartData.length - 1].distance;
+    if (totalDistance === 0) return [];
+
+    return chartData.map((point) => ({
+      offset: `${(point.distance / totalDistance) * 100}%`,
+      color: getSlopeColor(point.grade),
+    }));
+  }, [chartData]);
 
   const handleMouseMove = useCallback(
     (state: { activePayload?: Array<{ payload: ChartDataPoint }> }) => {
@@ -78,9 +95,25 @@ export default function ElevationChart({ compact = false }: ElevationChartProps)
             margin={{ top: 5, right: 10, left: -20, bottom: 0 }}
           >
             <defs>
-              <linearGradient id="elevationGradientCompact" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1} />
+              <linearGradient id="slopeGradientCompact" x1="0" y1="0" x2="1" y2="0">
+                {gradientStops.map((stop, index) => (
+                  <stop
+                    key={index}
+                    offset={stop.offset}
+                    stopColor={stop.color}
+                    stopOpacity={1}
+                  />
+                ))}
+              </linearGradient>
+              <linearGradient id="slopeStrokeCompact" x1="0" y1="0" x2="1" y2="0">
+                {gradientStops.map((stop, index) => (
+                  <stop
+                    key={index}
+                    offset={stop.offset}
+                    stopColor={stop.color}
+                    stopOpacity={1}
+                  />
+                ))}
               </linearGradient>
             </defs>
             <XAxis 
@@ -98,15 +131,15 @@ export default function ElevationChart({ compact = false }: ElevationChartProps)
             <Area
               type="monotone"
               dataKey="elevation"
-              stroke="#3b82f6"
-              strokeWidth={1.5}
-              fill="url(#elevationGradientCompact)"
+              stroke="url(#slopeStrokeCompact)"
+              strokeWidth={2}
+              fill="url(#slopeGradientCompact)"
               isAnimationActive={false}
             />
             {hoverPoint && (
               <ReferenceLine
                 x={hoverPoint.distance}
-                stroke="#ef4444"
+                stroke="#000"
                 strokeWidth={2}
               />
             )}
@@ -123,27 +156,44 @@ export default function ElevationChart({ compact = false }: ElevationChartProps)
           data={chartData}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+          margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
         >
           <defs>
-            <linearGradient id="elevationGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
-              <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1} />
+            <linearGradient id="slopeGradient" x1="0" y1="0" x2="1" y2="0">
+              {gradientStops.map((stop, index) => (
+                <stop
+                  key={index}
+                  offset={stop.offset}
+                  stopColor={stop.color}
+                  stopOpacity={1}
+                />
+              ))}
+            </linearGradient>
+            <linearGradient id="slopeStroke" x1="0" y1="0" x2="1" y2="0">
+              {gradientStops.map((stop, index) => (
+                <stop
+                  key={index}
+                  offset={stop.offset}
+                  stopColor={stop.color}
+                  stopOpacity={1}
+                />
+              ))}
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
           <XAxis
             dataKey="distance"
-            tickFormatter={(value: number) => `${value.toFixed(1)}`}
+            tickFormatter={(value: number) => `${value.toFixed(0)}`}
             stroke="#6b7280"
-            fontSize={11}
+            fontSize={10}
           />
           <YAxis
             domain={[minElevation, maxElevation]}
             tickFormatter={(value: number) => `${value}`}
             stroke="#6b7280"
-            fontSize={11}
-            width={40}
+            fontSize={10}
+            width={45}
+            tickCount={5}
           />
           <Tooltip
             content={({ active, payload }) => {
@@ -174,15 +224,15 @@ export default function ElevationChart({ compact = false }: ElevationChartProps)
           <Area
             type="monotone"
             dataKey="elevation"
-            stroke="#3b82f6"
+            stroke="url(#slopeStroke)"
             strokeWidth={2}
-            fill="url(#elevationGradient)"
+            fill="url(#slopeGradient)"
             isAnimationActive={false}
           />
           {hoverPoint && (
             <ReferenceLine
               x={hoverPoint.distance}
-              stroke="#ef4444"
+              stroke="#000"
               strokeWidth={2}
               strokeDasharray="5 5"
             />

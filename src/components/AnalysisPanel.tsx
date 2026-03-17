@@ -34,7 +34,7 @@ export default function AnalysisPanel() {
   const tabs: { id: Tab; label: string }[] = [
     { id: 'summary', label: 'Tổng quan' },
     { id: 'slopes', label: 'Độ dốc' },
-    { id: 'waypoints', label: 'Waypoints' },
+    { id: 'waypoints', label: 'Checkpoints' },
   ];
 
   return (

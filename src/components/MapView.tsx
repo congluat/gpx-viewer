@@ -158,6 +158,21 @@ function HoverMarker() {
   );
 }
 
+function createWaypointIcon(index: number) {
+  return new L.DivIcon({
+    className: 'waypoint-marker',
+    html: `
+      <div class="waypoint-container">
+        <div class="waypoint-pin"></div>
+        <div class="waypoint-label">CP${index + 1}</div>
+      </div>
+    `,
+    iconSize: [40, 50],
+    iconAnchor: [20, 50],
+    popupAnchor: [0, -50],
+  });
+}
+
 function Waypoints() {
   const { gpxData } = useGPX();
 
@@ -166,7 +181,7 @@ function Waypoints() {
   return (
     <>
       {gpxData.waypoints.map((wp, index) => (
-        <Marker key={index} position={[wp.lat, wp.lon]} icon={waypointIcon}>
+        <Marker key={index} position={[wp.lat, wp.lon]} icon={createWaypointIcon(index)}>
           <Popup>
             <div className="text-sm">
               <p className="font-bold">{wp.name}</p>
@@ -259,6 +274,30 @@ function KilometerMarkers() {
   );
 }
 
+function SlopeLegend() {
+  const legends = [
+    { color: '#22c55e', label: '< 5%', desc: 'Dễ' },
+    { color: '#eab308', label: '5-10%', desc: 'Trung bình' },
+    { color: '#f97316', label: '10-15%', desc: 'Khó' },
+    { color: '#ef4444', label: '> 15%', desc: 'Rất khó' },
+  ];
+
+  return (
+    <div className="slope-legend">
+      <div className="text-xs font-semibold mb-1 text-gray-700">Độ dốc</div>
+      {legends.map((item, index) => (
+        <div key={index} className="flex items-center gap-1.5 text-xs">
+          <div
+            className="w-4 h-2 rounded-sm"
+            style={{ backgroundColor: item.color }}
+          />
+          <span className="text-gray-600">{item.label}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function MapView() {
   const { gpxData, error } = useGPX();
 
@@ -289,23 +328,26 @@ export default function MapView() {
     : [21.0285, 105.8542]; // Hanoi default
 
   return (
-    <MapContainer
-      center={center}
-      zoom={13}
-      className="h-full w-full"
-      scrollWheelZoom={true}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <ScaleControl position="bottomright" metric={true} imperial={false} />
-      <MapController />
-      <TrackLine />
-      <KilometerMarkers />
-      <StartFinishMarkers />
-      <HoverMarker />
-      <Waypoints />
-    </MapContainer>
+    <div className="h-full w-full relative">
+      <MapContainer
+        center={center}
+        zoom={13}
+        className="h-full w-full"
+        scrollWheelZoom={true}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <ScaleControl position="bottomright" metric={true} imperial={false} />
+        <MapController />
+        <TrackLine />
+        <KilometerMarkers />
+        <StartFinishMarkers />
+        <HoverMarker />
+        <Waypoints />
+      </MapContainer>
+      <SlopeLegend />
+    </div>
   );
 }
