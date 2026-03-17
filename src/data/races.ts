@@ -25,6 +25,14 @@ export const races: Race[] = [
       { id: '5k', name: '5km', fileName: 'DUT 2026 - 5km.gpx' },
     ],
   },
+  {
+    id: 'dinh-harvet-spring-2026',
+    name: 'Dinh Harvet Spring 2026',
+    folder: 'dinh-harvet-spring-2026',
+    distances: [
+      { id: '15k', name: '15km', fileName: 'DHS 2025 - 15K.gpx' },
+    ],
+  },
 ];
 
 export function getGpxPath(race: Race, distance: RaceDistance): string {
