@@ -614,7 +614,7 @@ export default function MapView() {
       {
         enableHighAccuracy: true,
         timeout: 10000,
-        maximumAge: 0,
+        maximumAge: 3000,
       }
     );
     setWatchId(id);
