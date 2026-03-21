@@ -41,6 +41,146 @@ html, body, #root {
   }
 }
 
+/* GPS Toggle Button */
+.gps-toggle {
+  position: absolute;
+  bottom: 30px;
+  right: 10px;
+  z-index: 1000;
+  width: 40px;
+  height: 40px;
+  background: white;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.gps-toggle:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.gps-toggle.active {
+  background: #3b82f6;
+  color: white;
+}
+
+.gps-toggle.active:hover {
+  background: #2563eb;
+}
+
+.gps-toggle.error {
+  background: #fef2f2;
+  color: #ef4444;
+  border: 1px solid #fecaca;
+}
+
+.gps-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.4);
+  animation: gps-pulse 1.5s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes gps-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .gps-toggle {
+    bottom: 110px;
+    right: 8px;
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* GPS Info Panel */
+.gps-info-panel {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e5e7eb;
+  min-width: 180px;
+  max-width: 220px;
+}
+
+.gps-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding: 2px 0;
+}
+
+.gps-info-label {
+  color: #6b7280;
+}
+
+.gps-info-value {
+  font-weight: 600;
+  color: #374151;
+}
+
+.gps-info-section {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.gps-info-title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1024px) {
+  .gps-info-panel {
+    top: 8px;
+    left: 8px;
+    padding: 10px;
+    min-width: 160px;
+    max-width: 200px;
+  }
+
+  .gps-info-row {
+    font-size: 11px;
+  }
+
+  .gps-info-title {
+    font-size: 10px;
+  }
+}
+
 /* Kilometer markers on track */
 .km-marker {
   background: transparent !important;
