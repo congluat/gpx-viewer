@@ -24,8 +24,8 @@ function App() {
         {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Header */}
-          <header className="bg-white shadow-sm px-6 py-3 flex items-center">
-            <h1 className="text-xl font-bold text-gray-800">GPX Viewer</h1>
+          <header className="bg-white shadow-sm px-4 py-1.5 flex items-center">
+            <h1 className="text-sm font-semibold text-gray-600">GPX Viewer</h1>
           </header>
 
           {/* Map and Analysis */}
@@ -51,17 +51,17 @@ function App() {
       {/* Mobile Layout */}
       <div className="lg:hidden flex flex-col bg-gray-100" style={{ height: '100dvh' }}>
         {/* Mobile Header */}
-        <header className="bg-white shadow-sm px-4 py-2 flex items-center justify-between flex-shrink-0 z-20">
+        <header className="bg-white shadow-sm px-3 py-1 flex items-center justify-between flex-shrink-0 z-20">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="p-2 -ml-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg"
+            className="p-1.5 -ml-1 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
-          <h1 className="text-lg font-bold text-gray-800">GPX Viewer</h1>
-          <div className="w-10" />
+          <h1 className="text-sm font-semibold text-gray-600">GPX Viewer</h1>
+          <div className="w-8" />
         </header>
 
         {/* Mobile Top Navigation */}

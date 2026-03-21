@@ -78,15 +78,17 @@ function createKmIcon(km: number) {
 function MapController() {
   const map = useMap();
   const { gpxData } = useGPX();
+  const [lastGpxName, setLastGpxName] = useState<string | null>(null);
 
   useEffect(() => {
-    if (gpxData && gpxData.trackPoints.length > 0) {
+    if (gpxData && gpxData.trackPoints.length > 0 && gpxData.name !== lastGpxName) {
       const bounds = L.latLngBounds(
         gpxData.trackPoints.map((p) => [p.lat, p.lon] as [number, number])
       );
       map.fitBounds(bounds, { padding: [50, 50] });
+      setLastGpxName(gpxData.name);
     }
-  }, [gpxData, map]);
+  }, [gpxData, map, lastGpxName]);
 
   return null;
 }
@@ -371,6 +373,61 @@ function GPSToggleButton({ isTracking, onClick, error }: { isTracking: boolean; 
   );
 }
 
+function CenterButton({ onClick, disabled, isFollowing }: { onClick: () => void; disabled: boolean; isFollowing: boolean }) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`center-button ${disabled ? 'disabled' : ''} ${isFollowing ? 'following' : ''}`}
+      title={isFollowing ? 'Đang theo dõi (bấm để tắt)' : 'Theo dõi vị trí'}
+    >
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+        <circle cx="12" cy="12" r="3" fill="currentColor" />
+        <circle cx="12" cy="12" r="8" />
+        <line x1="12" y1="2" x2="12" y2="5" />
+        <line x1="12" y1="19" x2="12" y2="22" />
+        <line x1="2" y1="12" x2="5" y2="12" />
+        <line x1="19" y1="12" x2="22" y2="12" />
+      </svg>
+    </button>
+  );
+}
+
+function MapCenterController({ 
+  userPosition, 
+  isFollowing, 
+  onStopFollowing 
+}: { 
+  userPosition: UserPosition | null; 
+  isFollowing: boolean;
+  onStopFollowing: () => void;
+}) {
+  const map = useMap();
+
+  // Follow user position when isFollowing is true
+  useEffect(() => {
+    if (isFollowing && userPosition) {
+      map.setView([userPosition.lat, userPosition.lon], map.getZoom() < 17 ? 18 : map.getZoom(), { animate: true });
+    }
+  }, [isFollowing, userPosition, map]);
+
+  // Stop following when user drags the map
+  useEffect(() => {
+    const handleDragStart = () => {
+      if (isFollowing) {
+        onStopFollowing();
+      }
+    };
+
+    map.on('dragstart', handleDragStart);
+    return () => {
+      map.off('dragstart', handleDragStart);
+    };
+  }, [map, isFollowing, onStopFollowing]);
+
+  return null;
+}
+
 interface GPSInfoPanelProps {
   position: UserPosition;
   gpxData: NonNullable<ReturnType<typeof useGPX>['gpxData']>;
@@ -509,6 +566,17 @@ export default function MapView() {
   const [userPosition, setUserPosition] = useState<UserPosition | null>(null);
   const [gpsError, setGpsError] = useState<string | null>(null);
   const [watchId, setWatchId] = useState<number | null>(null);
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  const handleToggleFollow = useCallback(() => {
+    if (userPosition) {
+      setIsFollowing(prev => !prev);
+    }
+  }, [userPosition]);
+
+  const handleStopFollowing = useCallback(() => {
+    setIsFollowing(false);
+  }, []);
 
   const startTracking = useCallback(() => {
     if (!navigator.geolocation) {
@@ -618,6 +686,11 @@ export default function MapView() {
         />
         <ScaleControl position="bottomright" metric={true} imperial={false} />
         <MapController />
+        <MapCenterController 
+          userPosition={userPosition} 
+          isFollowing={isFollowing}
+          onStopFollowing={handleStopFollowing}
+        />
         <TrackLine />
         <KilometerMarkers />
         <StartFinishMarkers />
@@ -626,7 +699,10 @@ export default function MapView() {
         {userPosition && <UserLocationMarker position={userPosition} gpxData={gpxData} />}
       </MapContainer>
       <SlopeLegend />
-      <GPSToggleButton isTracking={isTracking} onClick={toggleTracking} error={gpsError} />
+      <div className="gps-buttons">
+        <CenterButton onClick={handleToggleFollow} disabled={!userPosition} isFollowing={isFollowing} />
+        <GPSToggleButton isTracking={isTracking} onClick={toggleTracking} error={gpsError} />
+      </div>
       {isTracking && userPosition && <GPSInfoPanel position={userPosition} gpxData={gpxData} />}
     </div>
   );

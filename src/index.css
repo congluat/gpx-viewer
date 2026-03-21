@@ -41,12 +41,26 @@ html, body, #root {
   }
 }
 
-/* GPS Toggle Button */
-.gps-toggle {
+/* GPS Buttons Container */
+.gps-buttons {
   position: absolute;
   bottom: 30px;
   right: 10px;
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@media (max-width: 1024px) {
+  .gps-buttons {
+    bottom: 110px;
+    right: 8px;
+  }
+}
+
+/* GPS Toggle Button */
+.gps-toggle {
   width: 40px;
   height: 40px;
   background: white;
@@ -59,6 +73,7 @@ html, body, #root {
   justify-content: center;
   color: #6b7280;
   transition: all 0.2s ease;
+  position: relative;
 }
 
 .gps-toggle:hover {
@@ -105,10 +120,51 @@ html, body, #root {
   }
 }
 
+/* Center Button */
+.center-button {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+
+.center-button:hover:not(.disabled) {
+  background: #f3f4f6;
+  color: #3b82f6;
+}
+
+.center-button:active:not(.disabled) {
+  background: #3b82f6;
+  color: white;
+}
+
+.center-button.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.center-button.following {
+  background: #22c55e;
+  color: white;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.3);
+}
+
+.center-button.following:hover {
+  background: #16a34a;
+}
+
 @media (max-width: 1024px) {
-  .gps-toggle {
-    bottom: 110px;
-    right: 8px;
+  .gps-toggle,
+  .center-button {
     width: 44px;
     height: 44px;
   }
