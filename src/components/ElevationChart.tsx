@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   ReferenceLine,
+  Label,
 } from 'recharts';
 import { useGPX } from '../context/GPXContext';
 import { getSlopeColor } from '../utils/slopeDetector';
@@ -29,6 +30,8 @@ interface GradientStop {
 
 export default function ElevationChart({ compact = false }: ElevationChartProps) {
   const { gpxData, hoverPoint, setHoverDistance } = useGPX();
+  
+  console.log('ElevationChart waypoints:', gpxData?.waypoints?.map(w => ({ name: w.name, distanceFromStart: w.distanceFromStart })));
 
   const chartData = useMemo((): ChartDataPoint[] => {
     if (!gpxData) return [];
@@ -136,6 +139,15 @@ export default function ElevationChart({ compact = false }: ElevationChartProps)
               fill="url(#slopeGradientCompact)"
               isAnimationActive={false}
             />
+            {/* Checkpoint markers */}
+            {gpxData.waypoints.map((wp, index) => (
+              <ReferenceLine
+                key={`cp-compact-${index}`}
+                x={wp.distanceFromStart}
+                stroke="#ef4444"
+                strokeWidth={2}
+              />
+            ))}
             {hoverPoint && (
               <ReferenceLine
                 x={hoverPoint.distance}
@@ -229,6 +241,24 @@ export default function ElevationChart({ compact = false }: ElevationChartProps)
             fill="url(#slopeGradient)"
             isAnimationActive={false}
           />
+          {/* Checkpoint markers */}
+          {gpxData.waypoints.map((wp, index) => (
+            <ReferenceLine
+              key={`cp-${index}`}
+              x={wp.distanceFromStart}
+              stroke="#3b82f6"
+              strokeWidth={1.5}
+              strokeDasharray="4 4"
+            >
+              <Label
+                value={`CP${index + 1}`}
+                position="top"
+                fill="#3b82f6"
+                fontSize={10}
+                fontWeight={600}
+              />
+            </ReferenceLine>
+          ))}
           {hoverPoint && (
             <ReferenceLine
               x={hoverPoint.distance}

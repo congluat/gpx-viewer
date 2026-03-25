@@ -76,8 +76,8 @@ function App() {
 
           {/* Elevation Chart - Overlay on map when selected */}
           {mobileTab === 'chart' && (
-            <div className="absolute inset-0 z-10 bg-white flex flex-col">
-              <div className="flex-1">
+            <div className="absolute inset-0 z-10 bg-white p-2">
+              <div className="w-full h-full">
                 <ElevationChart />
               </div>
             </div>
